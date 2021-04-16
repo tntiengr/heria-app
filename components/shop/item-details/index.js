@@ -1,0 +1,78 @@
+import React from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+import {SharedElement} from 'react-navigation-shared-element';
+
+import ArrowBack from '../../navigation-bar/ArrowBack';
+
+const {width} = Dimensions.get('window');
+
+function ItemDetails({navigation, route}) {
+  const {item} = route.params;
+
+  return (
+    <ScrollView style={styles.wrapper}>
+      <View style={styles.wrapper}>
+        <ArrowBack navigation={navigation} />
+        <SharedElement id={`item${item.id}.background`}>
+          <Image
+            style={styles.itemImage}
+            source={{uri: item?.images.background}}
+            resizeMode="cover"
+          />
+        </SharedElement>
+
+        <View style={styles.contentView}>
+          <Text style={styles.name}>{item?.name}</Text>
+          <Text style={styles.des}>{item?.description}</Text>
+          <Text style={styles.price}>${item?.price}</Text>
+        </View>
+      </View>
+    </ScrollView>
+  );
+}
+
+ItemDetails.sharedElements = (route, otherRoute, showing) => {
+  const {item} = route.params;
+  return [`item${item.id}.background`];
+};
+
+export default ItemDetails;
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#000',
+    marginBottom: 55,
+  },
+  itemImage: {
+    width: width,
+    height: width - 20,
+  },
+  contentView: {
+    padding: 12,
+  },
+  name: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 25,
+    marginBottom: 10,
+  },
+  des: {
+    color: '#fff',
+    fontWeight: '500',
+    fontSize: 18,
+    marginBottom: 5,
+  },
+  price: {
+    color: '#ffecd1',
+    fontWeight: '800',
+    fontSize: 20,
+  },
+});
